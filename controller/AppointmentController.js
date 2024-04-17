@@ -8,11 +8,13 @@ const getAllAppointments = async (req, res) => {
   }
 
   let appointments;
+
   try {
     if (isAdmin) {
       const company = await Company.findById(companyId).populate(
         "appointments"
       );
+
       appointments = company.appointments;
     } else {
       appointments = await Appointment.find({ authorizedUsers: id }).exec();
@@ -27,9 +29,11 @@ const getAllAppointments = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 const createAppointment = async (req, res) => {
   const { companyId, date, time, description, createdBy, authorizedUsers } =
     req.body;
+
   if (!companyId || !date || !time || !createdBy || !authorizedUsers) {
     return res
       .status(400)
@@ -47,6 +51,7 @@ const createAppointment = async (req, res) => {
       createdBy,
       authorizedUsers: allAuthorizedUsers,
     });
+
     res.json(appointment);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -54,6 +59,7 @@ const createAppointment = async (req, res) => {
 };
 const updateAppointment = async (req, res) => {
   const { createdBy, updatedAppointment, isAdmin, appointmentId } = req.body;
+
   if (!createdBy || !updatedAppointment) {
     return res
       .status(400)
@@ -62,6 +68,7 @@ const updateAppointment = async (req, res) => {
 
   try {
     let appointment;
+
     if (isAdmin) {
       appointment = await Appointment.findByIdAndUpdate(
         appointmentId,
@@ -88,6 +95,7 @@ const updateAppointment = async (req, res) => {
 
 const deleteAppointment = async (req, res) => {
   const { createdBy, appointmentId, isAdmin } = req.body;
+
   if (!createdBy || !appointmentId) {
     return res
       .status(400)
@@ -96,6 +104,7 @@ const deleteAppointment = async (req, res) => {
 
   try {
     let deletedAppointment;
+
     if (isAdmin) {
       deletedAppointment = await Appointment.deleteOne({ _id: appointmentId });
     } else {

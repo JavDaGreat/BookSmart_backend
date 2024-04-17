@@ -4,7 +4,9 @@ const bcrypt = require("bcrypt");
 
 const handleNewUser = async (req, res) => {
   const { name, email, password, companyName } = req.body;
+
   const companyId = req.body?.companyId;
+
   if (!name || !email || !password || (!companyId && !companyName)) {
     return res
       .status(400)
@@ -19,6 +21,7 @@ const handleNewUser = async (req, res) => {
     });
   }
   const DuplicateUser = await User.findOne({ email: email }).exec();
+
   if (DuplicateUser) {
     return res.status(409).json({ message: "User already exists" });
   }
@@ -30,6 +33,7 @@ const handleNewUser = async (req, res) => {
       email,
       password: hashedPwd,
     });
+
     let foundCompany = companyId
       ? await Company.findOne({ companyId: companyId }).exec()
       : null;
@@ -44,14 +48,17 @@ const handleNewUser = async (req, res) => {
       const companyExistByName =
         companyName &&
         (await Company.findOne({ companyName: companyName }).exec());
+
       if (companyExistByName) {
         return res.status(400).json({ message: "Company already exists" });
       }
+
       foundCompany = await Company.create({
         companyName: companyName,
         companyId: new mongoose.Types.ObjectId(),
         users: [user._id],
       });
+
       foundCompany.userCount = foundCompany.users.length;
       await foundCompany.save();
       user.companyId = foundCompany._id;
