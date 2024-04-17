@@ -30,14 +30,16 @@ const handleNewUser = async (req, res) => {
       email,
       password: hashedPwd,
     });
-    let company = companyId
+    let foundCompany = companyId
       ? await Company.findOne({ companyId: companyId }).exec()
       : null;
 
-    if (company) {
-      company.users.push(user._id);
-      company.userCount = company.users.length;
-      await company.save();
+    if (foundCompany) {
+      foundCompany.users.push(user._id);
+      foundCompany.userCount = foundCompany.users.length;
+      user.companyId = foundCompany._id;
+      await foundCompany.save();
+      await user.save();
     } else {
       const companyExistByName =
         companyName &&
@@ -45,13 +47,15 @@ const handleNewUser = async (req, res) => {
       if (companyExistByName) {
         return res.status(400).json({ message: "Company already exists" });
       }
-      company = await Company.create({
+      foundCompany = await Company.create({
         companyName: companyName,
         companyId: new mongoose.Types.ObjectId(),
         users: [user._id],
       });
-      company.userCount = company.users.length;
-      await company.save();
+      foundCompany.userCount = foundCompany.users.length;
+      await foundCompany.save();
+      user.companyId = foundCompany._id;
+      await user.save();
     }
 
     res.status(201).json(user);
