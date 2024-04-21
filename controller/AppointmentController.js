@@ -1,5 +1,5 @@
-const Appointment = require("../models/Appointment");
-const Company = require("../models/Company");
+const Appointment = require("../model/Appointment");
+const Company = require("../model/Company");
 
 const getAllAppointments = async (req, res) => {
   const { id, isAdmin, companyId } = req.body;

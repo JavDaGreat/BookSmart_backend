@@ -11,6 +11,13 @@ connectDB();
 
 app.use(cors({ origin: "*" })); // allow all origin to access
 
+app.use(express.json());
+
+app.use("/register", require("./routes/register"));
+
+app.use("/login", require("./routes/login"));
+app.use("/appointment", require("./routes/appointment"));
+
 mongoose.connection.once("open", () => {
   console.log("connected to mango");
 
