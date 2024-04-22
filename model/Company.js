@@ -7,7 +7,7 @@ const CompanySchema = new Schema({
     required: true,
   },
   companyId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: true,
   },
   tierPlan: {
@@ -25,13 +25,13 @@ const CompanySchema = new Schema({
   },
   users: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "User",
     },
   ],
   appointments: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "Appointment",
     },
   ],

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const AppointmentSchema = new Schema({
   companyId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "Business",
     required: true,
   },
@@ -19,14 +19,15 @@ const AppointmentSchema = new Schema({
     type: String,
   },
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "User",
     required: true,
   },
   authorizedUsers: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
       ref: "User",
+      required: false,
     },
   ],
 });

@@ -31,14 +31,16 @@ const getAllAppointments = async (req, res) => {
 };
 
 const createAppointment = async (req, res) => {
-  const { companyId, date, time, description, createdBy, authorizedUsers } =
-    req.body;
+  const { companyId, date, time, description, createdBy } = req.body;
+  const authorizedUsers = req.body?.authorizedUsers || [];
 
-  if (!companyId || !date || !time || !createdBy || !authorizedUsers) {
+  if (!companyId || !date || !time || !createdBy) {
     return res
       .status(400)
       .json({ message: "Please provide all the required fields" });
   }
+
+  console.log("authorizedUsers", typeof createdBy);
 
   try {
     const allAuthorizedUsers = [...authorizedUsers, createdBy];
