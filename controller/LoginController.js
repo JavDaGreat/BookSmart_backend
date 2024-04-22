@@ -1,27 +1,29 @@
 const User = require("../model/User");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const handleLogin = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  if (!username || !password) {
+  if (!email || !password) {
     return res
       .status(400)
       .json({ message: "Please provide all the required fields" });
   }
 
-  const foundUser = await User.findOne({ username: username }).exec();
+  const foundUser = await User.findOne({ email: email }).exec();
   if (!foundUser) {
-    return res.status(404).json({ message: "Username or Password is Wrong" });
+    return res.status(404).json({ message: "email or Password is Wrong" });
   }
 
   const isMatch = await bcrypt.compare(password, foundUser.password);
   if (!isMatch) {
-    return res.status(404).json({ message: "Username or Password is Wrong" });
+    return res.status(404).json({ message: "email or Password is Wrong" });
   }
 
   const accessToken = jwt.sign(
     {
-      username: foundUser.username,
+      email: foundUser.email,
       id: foundUser._id,
     },
     process.env.JWT_SECRET,

@@ -1,13 +1,19 @@
 const Company = require("../model/Company");
 const User = require("../model/User");
 const bcrypt = require("bcrypt");
-
+const mongoose = require("mongoose");
 const handleNewUser = async (req, res) => {
-  const { name, email, password, companyName } = req.body;
+  const { name, email, password, companyName, tierPlan } = req.body;
 
   const companyId = req.body?.companyId;
 
-  if (!name || !email || !password || (!companyId && !companyName)) {
+  if (
+    !name ||
+    !email ||
+    !tierPlan ||
+    !password ||
+    (!companyId && !companyName)
+  ) {
     return res
       .status(400)
       .json({ message: "Please provide all the required fields" });
@@ -29,7 +35,7 @@ const handleNewUser = async (req, res) => {
   try {
     const hashedPwd = await bcrypt.hash(password, 10);
     const user = await User.create({
-      userName: name,
+      name: name,
       email,
       password: hashedPwd,
     });
@@ -57,6 +63,7 @@ const handleNewUser = async (req, res) => {
         companyName: companyName,
         companyId: new mongoose.Types.ObjectId(),
         users: [user._id],
+        tierPlan,
       });
 
       foundCompany.userCount = foundCompany.users.length;
