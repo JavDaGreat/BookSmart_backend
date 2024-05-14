@@ -34,6 +34,7 @@ const handleLogin = async (req, res) => {
     id: foundUser._id,
     isAdmin: foundUser.isAdmin,
     companyId: foundUser.companyId,
+    name: foundUser.name,
   });
 };
 

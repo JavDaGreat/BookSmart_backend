@@ -12,6 +12,7 @@ const handleNewUser = async (req, res) => {
     !email ||
     !tierPlan ||
     !password ||
+    !confirmPassword ||
     (!companyId && !companyName)
   ) {
     return res
