@@ -3,7 +3,8 @@ const User = require("../model/User");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const handleNewUser = async (req, res) => {
-  const { name, email, password, companyName, tierPlan } = req.body;
+  const { name, email, password, companyName, tierPlan, confirmPassword } =
+    req.body;
 
   const companyId = req.body?.companyId;
 
@@ -26,6 +27,9 @@ const handleNewUser = async (req, res) => {
       message:
         "Password must be between 8 and 20 characters, and include at least one digit and one uppercase letter.",
     });
+  }
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: "Passwords do not match" });
   }
   const DuplicateUser = await User.findOne({ email: email }).exec();
 
