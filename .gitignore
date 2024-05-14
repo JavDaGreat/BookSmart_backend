@@ -26,3 +26,6 @@ yarn-error.log*
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# npm package files
+package-lock.json
