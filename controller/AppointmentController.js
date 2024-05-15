@@ -31,10 +31,10 @@ const getAllAppointments = async (req, res) => {
 };
 
 const createAppointment = async (req, res) => {
-  const { title, companyId, date, description, createdBy } = req.body;
+  const { title, companyId, start, end, description, createdBy } = req.body;
   const authorizedUsers = req.body?.guests || [];
 
-  if (!companyId || !date || !createdBy) {
+  if (!companyId || !start || !end || !createdBy) {
     return res
       .status(400)
       .json({ message: "Please provide all the required fields" });
@@ -48,7 +48,8 @@ const createAppointment = async (req, res) => {
     const appointment = await Appointment.create({
       title,
       companyId,
-      date,
+      start,
+      end,
       description,
       createdBy,
       authorizedUsers: allAuthorizedUsers,
