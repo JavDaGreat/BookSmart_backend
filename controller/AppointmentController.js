@@ -31,8 +31,8 @@ const getAllAppointments = async (req, res) => {
 };
 
 const createAppointment = async (req, res) => {
-  const { companyId, date, time, description, createdBy } = req.body;
-  const authorizedUsers = req.body?.authorizedUsers || [];
+  const { title, companyId, date, time, description, createdBy } = req.body;
+  const authorizedUsers = req.body?.guests || [];
 
   if (!companyId || !date || !time || !createdBy) {
     return res
@@ -46,6 +46,7 @@ const createAppointment = async (req, res) => {
     const allAuthorizedUsers = [...authorizedUsers, createdBy];
 
     const appointment = await Appointment.create({
+      title,
       companyId,
       date,
       time,
