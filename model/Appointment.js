@@ -7,11 +7,11 @@ const AppointmentSchema = new Schema({
     ref: "Business",
     required: true,
   },
-  date: {
+  start: {
     type: Date,
     required: true,
   },
-  time: {
+  end: {
     type: String,
     required: true,
   },

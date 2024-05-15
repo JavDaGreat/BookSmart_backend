@@ -54,7 +54,6 @@ const createAppointment = async (req, res) => {
       createdBy,
       authorizedUsers: allAuthorizedUsers,
     });
-
     res.json(appointment);
   } catch (err) {
     res.status(500).json({ message: err.message });
