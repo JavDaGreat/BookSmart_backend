@@ -32,18 +32,18 @@ const handleLogin = async (req, res) => {
   );
 
   const company = await Company.findById(foundUser.companyId).exec();
+  const colleagues = [];
 
-  const colleagues = (
-    await Promise.all(
-      company.users.map(async (userId) => {
-        if (userId !== foundUser._id) {
-          const user = await User.findById(userId);
-          return user ? user.username : null;
+  await Promise.all(
+    company.users.map(async (userId) => {
+      if (userId !== foundUser._id) {
+        const user = await User.findById(userId);
+        if (user) {
+          colleagues.push(user.name);
         }
-        return null;
-      })
-    )
-  ).filter((user) => user !== null);
+      }
+    })
+  );
 
   res.json({
     accessToken,
