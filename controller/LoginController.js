@@ -1,4 +1,5 @@
 const User = require("../model/User");
+const Company = require("../model/Company");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -29,12 +30,16 @@ const handleLogin = async (req, res) => {
     process.env.JWT_SECRET,
     { expiresIn: "12h" }
   );
+
+  const company = await Company.findById(foundUser.companyId).exec();
+  const colleague = company.users;
   res.json({
     accessToken,
     id: foundUser._id,
     isAdmin: foundUser.isAdmin,
     companyId: foundUser.companyId,
     name: foundUser.name,
+    colleague,
   });
 };
 
