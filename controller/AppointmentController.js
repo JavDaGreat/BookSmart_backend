@@ -1,9 +1,12 @@
 const Appointment = require("../model/Appointment");
 const Company = require("../model/Company");
+const User = require("../model/User");
 
 const getAllAppointments = async (req, res) => {
-  const { id, isAdmin, companyId } = req.body;
-  if (!id) {
+  const { id } = req.query;
+  const foundUser = await User.findOne({ _id: id }).exec();
+  const { isAdmin, companyId } = foundUser;
+  if (!id || !foundUser) {
     return res.status(404).json({ message: "User not Found" });
   }
 
