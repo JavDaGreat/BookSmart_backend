@@ -27,6 +27,16 @@ const getAllAppointments = async (req, res) => {
       return res.status(204).send();
     }
 
+    for (let appointment of appointments) {
+      for (let i = 0; i < appointment.authorizedUsers.length; i++) {
+        const user = await User.findById(appointment.authorizedUsers[i]);
+        appointment.authorizedUsers[i] = user.username;
+      }
+
+      const createdByUser = await User.findById(appointment.createdBy);
+      appointment.createdBy = createdByUser.username;
+    }
+
     res.json(appointments);
   } catch (err) {
     res.status(500).json({ message: err.message });
