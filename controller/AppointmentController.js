@@ -30,11 +30,11 @@ const getAllAppointments = async (req, res) => {
     for (let appointment of appointments) {
       for (let i = 0; i < appointment.authorizedUsers.length; i++) {
         const user = await User.findById(appointment.authorizedUsers[i]);
-        appointment.authorizedUsers[i] = user.username;
+        appointment.authorizedUsers[i] = user.name;
       }
 
       const createdByUser = await User.findById(appointment.createdBy);
-      appointment.createdBy = createdByUser.username;
+      appointment.createdBy = createdByUser.name;
     }
 
     res.json(appointments);
