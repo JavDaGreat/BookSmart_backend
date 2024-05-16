@@ -32,7 +32,7 @@ const handleLogin = async (req, res) => {
   );
 
   const company = await Company.findById(foundUser.companyId).exec();
-  const colleague = company.users;
+  const colleague = company.users.filter((userId) => userId !== foundUser._id);
   res.json({
     accessToken,
     id: foundUser._id,
