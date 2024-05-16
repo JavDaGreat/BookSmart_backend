@@ -71,7 +71,7 @@ const createAppointment = async (req, res) => {
   }
 };
 const updateAppointment = async (req, res) => {
-  const { createdBy, updatedAppointment, isAdmin, appointmentId } = req.body;
+  const { updatedAppointment, isAdmin, appointmentId } = req.body;
 
   if (!createdBy || !updatedAppointment) {
     return res
