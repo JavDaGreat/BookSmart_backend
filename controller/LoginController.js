@@ -32,14 +32,14 @@ const handleLogin = async (req, res) => {
   );
 
   const company = await Company.findById(foundUser.companyId).exec();
-  const colleagues = await Promise.all(
-    company.users.map(async (userId) => {
-      if (userId !== foundUser._id) {
-        const user = await User.findById(userId);
-        return user.username;
-      }
-    })
-  );
+
+  const colleagues = company.users.map(async (userId) => {
+    if (userId !== foundUser._id) {
+      const user = await User.findById(userId);
+      return user.username;
+    }
+  });
+
   res.json({
     accessToken,
     id: foundUser._id,

@@ -53,8 +53,6 @@ const createAppointment = async (req, res) => {
       .json({ message: "Please provide all the required fields" });
   }
 
-  console.log("authorizedUsers", typeof createdBy);
-
   try {
     const allAuthorizedUsers = [...authorizedUsers, createdBy];
 
