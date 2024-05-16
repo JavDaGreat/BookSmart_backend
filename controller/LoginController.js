@@ -39,7 +39,7 @@ const handleLogin = async (req, res) => {
       if (userId !== foundUser._id) {
         const user = await User.findById(userId);
         if (user) {
-          colleagues.push(user.name);
+          colleagues.push(user.email);
         }
       }
     })
