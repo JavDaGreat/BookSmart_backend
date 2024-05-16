@@ -71,33 +71,33 @@ const createAppointment = async (req, res) => {
   }
 };
 const updateAppointment = async (req, res) => {
-  const { updatedAppointment, isAdmin, appointmentId } = req.body;
+  const { updatedAppointment, isAdmin, appointmentId, userId } = req.body;
 
-  if (!createdBy || !updatedAppointment) {
+  if (!userId || !updatedAppointment || !appointmentId) {
     return res
       .status(400)
       .json({ message: "Please provide all the required fields" });
   }
 
   try {
-    let appointment;
+    const appointment = await Appointment.findById(appointmentId).exec();
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
 
     if (isAdmin) {
-      appointment = await Appointment.findByIdAndUpdate(
+      appointment.findByIdAndUpdate(
         appointmentId,
         { $set: updatedAppointment },
         { new: true }
       );
-    } else {
+    }
+    if (appointment.createdBy === userId) {
       appointment = await Appointment.findOneAndUpdate(
         { _id: appointmentId, createdBy },
         { $set: updatedAppointment },
         { new: true }
       );
-    }
-
-    if (!appointment) {
-      return res.status(404).json({ message: "Appointment not found" });
     }
 
     res.json(appointment);
