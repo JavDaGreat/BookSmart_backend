@@ -73,6 +73,8 @@ const createAppointment = async (req, res) => {
 const updateAppointment = async (req, res) => {
   const { updatedAppointment, isAdmin, appointmentId, userId } = req.body;
 
+  console.log(req.body);
+
   if (!userId || !updatedAppointment || !appointmentId) {
     return res
       .status(400)
@@ -93,8 +95,8 @@ const updateAppointment = async (req, res) => {
       );
     }
     if (appointment.createdBy === userId) {
-      appointment = await Appointment.findOneAndUpdate(
-        { _id: appointmentId, createdBy },
+      await Appointment.findOneAndUpdate(
+        { _id: appointmentId },
         { $set: updatedAppointment },
         { new: true }
       );
