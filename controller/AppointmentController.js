@@ -21,7 +21,7 @@ const getAllAppointments = async (req, res) => {
       appointments = company.appointments;
     } else {
       appointments = await Appointment.find({
-        authorizedUsers: foundUser.name,
+        authorizedUsers: foundUser.id,
       }).exec();
     }
 
@@ -74,6 +74,15 @@ const createAppointment = async (req, res) => {
 };
 const updateAppointment = async (req, res) => {
   const { updatedAppointment, isAdmin, appointmentId, userId } = req.body;
+
+  for (let i = 0; i < updateAppointment.authorizedUsers.length; i++) {
+    const user = await User.findOne({
+      name: updateAppointment.authorizedUsers[i],
+    });
+    if (user) {
+      updateAppointment.authorizedUsers[i] = user.id;
+    }
+  }
 
   if (!userId || !updatedAppointment || !appointmentId) {
     return res
