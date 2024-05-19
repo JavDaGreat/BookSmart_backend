@@ -75,12 +75,12 @@ const createAppointment = async (req, res) => {
 const updateAppointment = async (req, res) => {
   const { updatedAppointment, isAdmin, appointmentId, userId } = req.body;
 
-  for (let i = 0; i < updateAppointment.authorizedUsers.length; i++) {
+  for (let i = 0; i < updatedAppointment.authorizedUsers.length; i++) {
     const user = await User.findOne({
-      name: updateAppointment.authorizedUsers[i],
+      name: updatedAppointment.authorizedUsers[i],
     });
     if (user) {
-      updateAppointment.authorizedUsers[i] = user.id;
+      updatedAppointment.authorizedUsers[i] = user.id;
     }
   }
 
@@ -96,22 +96,23 @@ const updateAppointment = async (req, res) => {
       return res.status(404).json({ message: "Appointment not found" });
     }
 
+    let updated;
     if (isAdmin) {
-      appointment.findByIdAndUpdate(
+      updated = await Appointment.findByIdAndUpdate(
         appointmentId,
         { $set: updatedAppointment },
         { new: true }
       );
     }
-    if (appointment.createdBy === userId) {
-      await Appointment.findOneAndUpdate(
+    if (appointment.createdBy.toString() === userId) {
+      updated = await Appointment.findOneAndUpdate(
         { _id: appointmentId },
         { $set: updatedAppointment },
         { new: true }
       );
     }
 
-    res.json(appointment);
+    res.json(updated);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
