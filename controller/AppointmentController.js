@@ -72,8 +72,7 @@ const createAppointment = async (req, res) => {
 };
 const updateAppointment = async (req, res) => {
   const { updatedAppointment, isAdmin, appointmentId, userId } = req.body;
-
-  console.log(req.body);
+  updatedAppointment.createdBy = userId;
 
   if (!userId || !updatedAppointment || !appointmentId) {
     return res
