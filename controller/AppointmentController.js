@@ -119,9 +119,9 @@ const updateAppointment = async (req, res) => {
 };
 
 const deleteAppointment = async (req, res) => {
-  const { createdBy, appointmentId, isAdmin } = req.body;
+  const { userId, appointmentId, isAdmin } = req.body;
 
-  if (!createdBy || !appointmentId) {
+  if (!userId || !appointmentId) {
     return res
       .status(400)
       .json({ message: "Please provide all the required fields" });
@@ -135,7 +135,7 @@ const deleteAppointment = async (req, res) => {
     } else {
       deletedAppointment = await Appointment.deleteOne({
         _id: appointmentId,
-        createdBy,
+        createdBy: userId,
       });
     }
 
